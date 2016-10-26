@@ -20,8 +20,6 @@ myApp.config(function ($routeProvider, authProvider, $httpProvider,
     requiresLogin: true
   });
 
-  $locationProvider.hashPrefix('!');
-
   authProvider.init({
     domain: 'contoso.auth0.com',
     clientID: 'DyG9nCwIEofSy66QM3oo5xU6NFs3TmvT',
