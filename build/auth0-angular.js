@@ -1,6 +1,6 @@
 /**
  * Angular SDK to use with Auth0
- * @version v4.2.5 - 2016-09-15
+ * @version v4.2.6 - 2016-10-26
  * @link https://auth0.com
  * @author Martin Gontovnikas
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -100,7 +100,7 @@
                                 success && success.apply(null, etc);
                             };
                             if (success || error) {
-                                args.push(authUtils.applied(callback));
+                                args.push( (!success) ? authUtils.errorHandler(callback) : authUtils.applied(callback) );
                             }
                             nodeback.apply(self, args);
                         };
@@ -163,6 +163,26 @@
                         });
                     };
                 };
+
+                /*
+                 *
+                 * DESCRIPTION: Uses safeApply() on a callback after passing in the callback arguments
+                 * INPUT: function
+                 * OUTPUT: function
+                 *
+                 * */
+                
+                authUtils.errorHandler = function(fn) {
+                  return function () {
+                    var args = Array.prototype.slice.call(arguments);
+                    if (args[0] !== null) {
+                      authUtils.safeApply(function () {
+                        fn.apply(null, args);
+                      });
+                    }
+                  };
+                };
+                
 
                 return authUtils;
             }];
@@ -622,7 +642,7 @@
                         }
                     };
 
-                    var errorFn = !errorCallback ? null : function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                         callHandler('loginFailure', { error: err });
                         if (errorCallback) {
                             errorCallback(err);
@@ -652,7 +672,7 @@
                       }
                     };
 
-                    var errorFn = !errorCallback ? null : function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                       callHandler('loginFailure', { error: err });
                       if (errorCallback) {
                         errorCallback(err);
@@ -688,7 +708,7 @@
                         }
                     };
 
-                    var errorFn = !errorCallback ? null : function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                         callHandler('loginFailure', { error: err });
                         if (errorCallback) {
                             errorCallback(err);
@@ -739,7 +759,7 @@
                        });
                     };
 
-                    var errorFn = function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                         if (errorCallback) {
                             errorCallback(err);
                         }
