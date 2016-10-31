@@ -1,3 +1,5 @@
+# 4.2.7
+* Fixed but for `loginFailure` event not catching errors
 
 # 4.0.X
 
