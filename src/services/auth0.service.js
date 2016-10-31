@@ -449,7 +449,7 @@
                         }
                     };
 
-                    var errorFn = !errorCallback ? null : function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                         callHandler('loginFailure', { error: err });
                         if (errorCallback) {
                             errorCallback(err);
@@ -479,7 +479,7 @@
                       }
                     };
 
-                    var errorFn = !errorCallback ? null : function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                       callHandler('loginFailure', { error: err });
                       if (errorCallback) {
                         errorCallback(err);
@@ -515,7 +515,7 @@
                         }
                     };
 
-                    var errorFn = !errorCallback ? null : function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                         callHandler('loginFailure', { error: err });
                         if (errorCallback) {
                             errorCallback(err);
@@ -566,7 +566,7 @@
                        });
                     };
 
-                    var errorFn = function(err) {
+                    var errorFn = (!errorCallback && !getHandlers('loginFailure')) ? null : function(err) {
                         if (errorCallback) {
                             errorCallback(err);
                         }

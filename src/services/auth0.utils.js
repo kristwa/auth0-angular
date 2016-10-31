@@ -86,7 +86,7 @@
                                 success && success.apply(null, etc);
                             };
                             if (success || error) {
-                                args.push(authUtils.applied(callback));
+                                args.push( (!success) ? authUtils.errorHandler(callback) : authUtils.applied(callback) );
                             }
                             nodeback.apply(self, args);
                         };
@@ -149,6 +149,26 @@
                         });
                     };
                 };
+
+                /*
+                 *
+                 * DESCRIPTION: Uses safeApply() on a callback after passing in the callback arguments
+                 * INPUT: function
+                 * OUTPUT: function
+                 *
+                 * */
+                
+                authUtils.errorHandler = function(fn) {
+                  return function () {
+                    var args = Array.prototype.slice.call(arguments);
+                    if (args[0] !== null) {
+                      authUtils.safeApply(function () {
+                        fn.apply(null, args);
+                      });
+                    }
+                  };
+                };
+                
 
                 return authUtils;
             }];
