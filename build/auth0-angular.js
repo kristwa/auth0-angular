@@ -1,6 +1,6 @@
 /**
  * Angular SDK to use with Auth0
- * @version v4.2.7 - 2016-10-31
+ * @version v4.2.7 - 2017-06-24
  * @link https://auth0.com
  * @author Martin Gontovnikas
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -484,6 +484,8 @@
                     /*jshint latedef: nofunc */
 
                 function verifyRoute(requiresLogin, e, getState, redirectToLogin) {
+                    resolveAuth();
+                    
                     if (!auth.isAuthenticated && !auth.refreshTokenPromise) {
                         if (config.sso) {
                             if (requiresLogin) {e.preventDefault();}
@@ -509,6 +511,19 @@
                             redirectToLogin();
                         }
                     }
+                }
+
+                function resolveAuth() {
+                    if (auth.isAuthenticated)
+                        return true;
+
+                    var token = window.localStorage.getItem('token');
+                    var profile = window.localStorage.getItem('profile');
+
+                    if (token && profile)
+                        auth.authenticate(JSON.parse(profile), JSON.parse(token));
+
+                    return auth.isAuthenticated;
                 }
 
                 // Start auth service

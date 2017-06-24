@@ -291,6 +291,8 @@
                     /*jshint latedef: nofunc */
 
                 function verifyRoute(requiresLogin, e, getState, redirectToLogin) {
+                    resolveAuth();
+                    
                     if (!auth.isAuthenticated && !auth.refreshTokenPromise) {
                         if (config.sso) {
                             if (requiresLogin) {e.preventDefault();}
@@ -316,6 +318,19 @@
                             redirectToLogin();
                         }
                     }
+                }
+
+                function resolveAuth() {
+                    if (auth.isAuthenticated)
+                        return true;
+
+                    var token = window.localStorage.getItem('token');
+                    var profile = window.localStorage.getItem('profile');
+
+                    if (token && profile)
+                        auth.authenticate(JSON.parse(profile), JSON.parse(token));
+
+                    return auth.isAuthenticated;
                 }
 
                 // Start auth service

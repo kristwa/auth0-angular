@@ -251,7 +251,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build', ['clean', 'jshint', 'concat', 'uglify', 'karma', 'copy']);
+  grunt.registerTask('build', ['clean', 'concat', 'uglify', 'copy']);
   grunt.registerTask('test', ['build', 'karma']);
   grunt.registerTask('scenario', ['build', 'connect:scenario_custom_login', 'protractor:local']);
 
